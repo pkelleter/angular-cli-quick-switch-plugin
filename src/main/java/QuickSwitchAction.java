@@ -1,10 +1,8 @@
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 
@@ -25,7 +23,7 @@ public class QuickSwitchAction extends AnAction {
     public void actionPerformed(AnActionEvent event) {
         this.latestEvent = event;
 
-        VirtualFile currentFile = DataKeys.VIRTUAL_FILE.getData(event.getDataContext());
+        VirtualFile currentFile = (VirtualFile) event.getDataContext().getData("virtualFile");
         if (currentFile == null) return;
 
         String currentFilePath = currentFile.getCanonicalPath();
@@ -77,17 +75,6 @@ public class QuickSwitchAction extends AnAction {
 
     private VirtualFile getFileByPath(String path) {
         return LocalFileSystem.getInstance().findFileByPath(path);
-    }
-
-    private void showMessage(String message) {
-        Project project = this.latestEvent.getProject();
-        if (project == null) return;
-        Messages.showMessageDialog(
-                project,
-                message,
-                "Info",
-                Messages.getInformationIcon()
-        );
     }
 
 }
