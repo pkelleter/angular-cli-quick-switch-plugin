@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'patrick.kelleter'
-version '1.0'
+version '1.1'
 
 apply plugin: 'java'
 
@@ -22,5 +22,5 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-    Initial Version of Angular-Cli QuickSwitch"""
+    Added support for pure JavaScript files"""
 }
