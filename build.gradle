@@ -24,3 +24,7 @@ patchPluginXml {
     changeNotes """
     Added support for pure JavaScript files"""
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.7'
+}
