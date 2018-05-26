@@ -8,7 +8,7 @@
     ]]></description>
 
     <change-notes><![CDATA[
-      Added support for pure JavaScript files.<br>
+      Added support for sass files.<br>
     ]]>
     </change-notes>
 
