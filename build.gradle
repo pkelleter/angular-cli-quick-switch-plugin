@@ -22,5 +22,5 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-    Added support for pure JavaScript files"""
+    Added support for sass files"""
 }
