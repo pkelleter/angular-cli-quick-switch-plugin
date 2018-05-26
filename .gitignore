@@ -1,2 +1,8 @@
-.idea
-build
+.idea/*
+
+*.iws
+*.iml
+
+out/
+build/
+

@@ -22,5 +22,9 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-    Added support for sass files"""
+        Added support for sass files"""
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.7'
 }
