@@ -13,7 +13,11 @@ public class QuickSwitchAction extends AnAction {
 
     private AnActionEvent latestEvent;
 
-    private List<String> extensions = Arrays.asList("ts", "js", "html", "css", "sass", "scss");
+    private List<String> extensions = Arrays.asList(
+      "ts", "js",
+      "html", "php", "haml", "jade", "pug", "slim",
+      "css", "sass", "scss", "less", "styl"
+    );
 
     public QuickSwitchAction() {
         super("QuickSwitch");
