@@ -1,5 +1,15 @@
-.idea/
 .gradle/
+
+# Allow to share common Idea settings
+.idea/*
+!.idea/codeStyles
+!.idea/gradle.xml
+!.idea/inspectionProfiles
+!.idea/misc.xml
+!.idea/runConfigurations
+!.idea/runConfigurations.xml
+!.idea/vcs.xml
+!.idea/*.iml
 
 *.iws
 *.iml
