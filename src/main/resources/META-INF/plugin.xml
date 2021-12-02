@@ -1,14 +1,14 @@
-<idea-plugin url="https://github.com/pkelleter/angular-cli-quick-switch-plugin">
-    <id>patrick.kelleter.angular-cli-quick-switch</id>
-    <name>Angular CLI QuickSwitch</name>
-    <vendor email="patrick.kelleter.1987@gmail.com" url="https://github.com/pkelleter/angular-cli-quick-switch-plugin">Patrick Kelleter</vendor>
+<idea-plugin url="https://github.com/cothema/react-quick-switch-idea-plugin">
+    <id>cothema.react-quick-switch</id>
+    <name>React QuickSwitch</name>
+    <vendor email="miloshavlicek@gmail.com" url="https://github.com/cothema/react-quick-switch-idea-plugin">Miloš Havlíček</vendor>
 
     <description><![CDATA[
-    Angular CLI QuickSwitch allows you to switch amongst files of one component efficiently, by just using one shortcut (default Alt + S). Supported extensions are js, jsx, ts, tsx, html, php, haml, jade, pug, slim, css, sass, scss, less, styl.
+    React QuickSwitch allows you to switch amongst files of one component efficiently, by just using one shortcut (default Alt + S). Supported extensions are tsx, ts, jsx, js, html, php, haml, jade, pug, slim, css, sass, scss, less, styl.
     ]]></description>
 
     <change-notes><![CDATA[
-      - Added support for jsx, tsx files.
+      - Added support for jsx, tsx files (forked from React CLI QuickSwitch plugin)
     ]]>
     </change-notes>
 
