@@ -14,7 +14,7 @@ public class QuickSwitchAction extends AnAction {
     private AnActionEvent latestEvent;
 
     private List<String> extensions = Arrays.asList(
-      "ts", "js",
+      "ts", "tsx",  "js", "jsx",
       "html", "php", "haml", "jade", "pug", "slim",
       "css", "sass", "scss", "less", "styl"
     );

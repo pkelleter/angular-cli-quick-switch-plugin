@@ -4,11 +4,11 @@
     <vendor email="patrick.kelleter.1987@gmail.com" url="https://github.com/pkelleter/angular-cli-quick-switch-plugin">Patrick Kelleter</vendor>
 
     <description><![CDATA[
-    Angular CLI QuickSwitch allows you to switch amongst files of one component efficiently, by just using one shortcut (default Alt + S). Supported extensions are js, ts, html, php, haml, jade, pug, slim, css, sass, scss, less, styl.
+    Angular CLI QuickSwitch allows you to switch amongst files of one component efficiently, by just using one shortcut (default Alt + S). Supported extensions are js, jsx, ts, tsx, html, php, haml, jade, pug, slim, css, sass, scss, less, styl.
     ]]></description>
 
     <change-notes><![CDATA[
-      - Added support for php, haml, jade, pug, slim, less, styl files.<br> - Updated docs<br>
+      - Added support for jsx, tsx files.
     ]]>
     </change-notes>
 
