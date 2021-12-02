@@ -13,8 +13,8 @@
 !.idea/*.iml
 
 *.iws
-*.iml
 
 out/
 build/
 
+*.jar

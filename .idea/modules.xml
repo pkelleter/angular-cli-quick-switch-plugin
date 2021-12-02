@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/ReactQuickSwitch.iml" filepath="$PROJECT_DIR$/.idea/ReactQuickSwitch.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ReactQuickSwitch.iml" filepath="$PROJECT_DIR$/ReactQuickSwitch.iml" />
     </modules>
   </component>
 </project>
