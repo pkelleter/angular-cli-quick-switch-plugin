@@ -1,7 +1,8 @@
 <idea-plugin url="https://github.com/cothema/react-quick-switch-idea-plugin">
     <id>cothema.react-quick-switch</id>
     <name>React QuickSwitch</name>
-    <vendor email="miloshavlicek@gmail.com" url="https://github.com/cothema/react-quick-switch-idea-plugin">Miloš Havlíček</vendor>
+    <vendor email="miloshavlicek@gmail.com" url="https://github.com/cothema/react-quick-switch-idea-plugin">Cothema</vendor>
+    <version>1.3</version>
 
     <description><![CDATA[
     React QuickSwitch allows you to switch amongst files of one component efficiently, by just using one shortcut (default Alt + S). Supported extensions are tsx, ts, jsx, js, html, php, haml, jade, pug, slim, css, sass, scss, less, styl.
