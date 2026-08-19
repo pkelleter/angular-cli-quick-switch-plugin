@@ -91,7 +91,7 @@ public final class QuickSwitchConfigurable implements Configurable {
             );
             JBTextField customSuffixField = new JBTextField(7);
             customSuffixField.getEmptyText().setText(".custom");
-            customSuffixField.setToolTipText("Enter a suffix such as tsx or component.html");
+            customSuffixField.setToolTipText("Enter a suffix such as .tsx or .component.html");
             customEnabledCheckBox.addActionListener(event ->
                 customSuffixField.setEnabled(customEnabledCheckBox.isSelected()));
             customEnabledCheckBoxes.put(category, customEnabledCheckBox);
@@ -138,8 +138,8 @@ public final class QuickSwitchConfigurable implements Configurable {
             if (Configurable.isCheckboxModified(
                 customEnabledCheckBoxes.get(category),
                 settings.isCustomSuffixEnabled(category)
-            ) || !normalizeSuffix(customSuffixFields.get(category).getText())
-                .equals(settings.getCustomSuffix(category))) {
+            ) || !customSuffixFields.get(category).getText().trim()
+                .equals(formatSuffix(settings.getCustomSuffix(category)))) {
                 return true;
             }
         }
@@ -160,7 +160,7 @@ public final class QuickSwitchConfigurable implements Configurable {
         if (customEnabledCheckBoxes != null && customSuffixFields != null) {
             customSuffixes.forEach((category, suffix) -> {
                 settings.setCustomSuffix(category, suffix, customEnabledCheckBoxes.get(category).isSelected());
-                customSuffixFields.get(category).setText(suffix);
+                customSuffixFields.get(category).setText(formatSuffix(suffix));
             });
         }
     }
@@ -179,7 +179,7 @@ public final class QuickSwitchConfigurable implements Configurable {
             for (QuickSwitchFileType.Category category : QuickSwitchFileType.Category.values()) {
                 boolean enabled = settings.isCustomSuffixEnabled(category);
                 customEnabledCheckBoxes.get(category).setSelected(enabled);
-                customSuffixFields.get(category).setText(settings.getCustomSuffix(category));
+                customSuffixFields.get(category).setText(formatSuffix(settings.getCustomSuffix(category)));
                 customSuffixFields.get(category).setEnabled(enabled);
             }
         }
@@ -216,12 +216,19 @@ public final class QuickSwitchConfigurable implements Configurable {
         }
 
         for (QuickSwitchFileType.Category category : QuickSwitchFileType.Category.values()) {
-            String suffix = normalizeSuffix(customSuffixFields.get(category).getText());
+            String enteredSuffix = customSuffixFields.get(category).getText().trim().toLowerCase(Locale.ROOT);
+            String suffix = normalizeSuffix(enteredSuffix);
             boolean enabled = customEnabledCheckBoxes.get(category).isSelected();
-            if (enabled && suffix.isEmpty()) {
+            if (enabled && enteredSuffix.isEmpty()) {
                 throw new ConfigurationException(category.displayName() + " custom suffix cannot be empty.");
             }
-            if (!suffix.isEmpty() && !suffix.matches("[a-z0-9_-]+(?:\\.[a-z0-9_-]+)*")) {
+            if (!enteredSuffix.isEmpty() && !enteredSuffix.startsWith(".")) {
+                throw new ConfigurationException(
+                    category.displayName() + " custom suffix must start with a dot."
+                );
+            }
+            if (!enteredSuffix.isEmpty()
+                && !enteredSuffix.matches("\\.[a-z0-9_-]+(?:\\.[a-z0-9_-]+)*")) {
                 throw new ConfigurationException(
                     category.displayName() + " custom suffix contains invalid characters."
                 );
@@ -236,9 +243,13 @@ public final class QuickSwitchConfigurable implements Configurable {
 
     private static String normalizeSuffix(String value) {
         String suffix = value.trim().toLowerCase(Locale.ROOT);
-        while (suffix.startsWith(".")) {
+        if (suffix.startsWith(".")) {
             suffix = suffix.substring(1);
         }
         return suffix;
+    }
+
+    private static String formatSuffix(String suffix) {
+        return suffix.isEmpty() ? "" : "." + suffix;
     }
 }

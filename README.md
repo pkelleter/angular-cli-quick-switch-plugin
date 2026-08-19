@@ -22,8 +22,8 @@ Test files are excluded from the main cycle by default. Press **Alt+T** to jump 
 
 ## Shortcuts
 
-| Action | Default   | Behavior |
-|---|-----------|---|
+| Action | Default | Behavior |
+|---|---|---|
 | QuickSwitch | **Alt+S** | Cycles through all enabled related file types. |
 | QuickSwitch: Controllers | **Alt+X** | Jumps to and cycles between `.ts` and `.js`. |
 | QuickSwitch: Markup | **Alt+C** | Jumps to and cycles between supported markup files. |
@@ -57,13 +57,13 @@ The settings page groups file types by purpose:
 | Style | `.css`, `.sass`, `.scss`, `.less`, `.styl` | Enabled |
 | Tests | `.spec.ts`, `.spec.js` | Disabled |
 
-Each checkbox controls whether that file type participates in the main **Alt+S** cycle. This makes workflows such as cycling directly between TypeScript and HTML possible by disabling the style types.
+**Alt+S** checks the groups in the listed order: Controller, Template, Style, then Tests. Each checkbox controls whether that file type participates in the main cycle, making workflows such as cycling directly between TypeScript and HTML possible by disabling the style types.
 
 The dedicated category shortcuts intentionally ignore these checkboxes. For example, **Alt+T** can always find a related test file even when tests are excluded from the main cycle.
 
 ### Custom Extensions
 
-Each group supports one optional custom suffix, such as `.tsx` or `.module.scss`; enable its checkbox and enter a unique suffix with or without a leading dot. Custom suffixes are appended to their group and participate in both the main cycle and dedicated category shortcut only while enabled.
+Each group supports one optional custom suffix, such as `.tsx` or `.module.scss`; enable its checkbox and enter a unique suffix starting with a dot. Enabled custom suffixes are appended to their group and used as targets by both the main cycle and dedicated category shortcut.
 
 ## Compatibility
 
