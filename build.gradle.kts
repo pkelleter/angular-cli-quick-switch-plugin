@@ -42,6 +42,7 @@ intellijPlatform {
                 <li>Updated for IntelliJ Platform 2024.2 and newer.</li>
                 <li>Added a settings page with optional previous-tab closing.</li>
                 <li>Added grouped file-type controls and optional spec.ts/spec.js test cycling.</li>
+                <li>Added dedicated shortcuts for tests, controllers, styles, and markup.</li>
                 <li>Fixed switching in editor splits and removed tab-closing side effects by default.</li>
                 <li>Improved support for virtual files and modern IntelliJ action APIs.</li>
             </ul>

@@ -109,6 +109,76 @@ public final class QuickSwitchActionTest extends BasePlatformTestCase {
         ));
     }
 
+    public void testJumpsDirectlyToFirstTestFile() {
+        VirtualFile typescript = addFile("example.component.ts");
+        VirtualFile typescriptSpec = addFile("example.component.spec.ts");
+        addFile("example.component.spec.js");
+
+        VirtualFile target = QuickSwitchAction.findTargetFile(
+            typescript,
+            QuickSwitchFileType.Category.TESTS
+        );
+
+        assertTarget(typescriptSpec, target);
+    }
+
+    public void testCyclesOnlyWithinTestFiles() {
+        VirtualFile typescriptSpec = addFile("example.component.spec.ts");
+        VirtualFile javascriptSpec = addFile("example.component.spec.js");
+        addFile("example.component.ts");
+
+        assertTarget(javascriptSpec, QuickSwitchAction.findTargetFile(
+            typescriptSpec,
+            QuickSwitchFileType.Category.TESTS
+        ));
+        assertTarget(typescriptSpec, QuickSwitchAction.findTargetFile(
+            javascriptSpec,
+            QuickSwitchFileType.Category.TESTS
+        ));
+    }
+
+    public void testJumpsDirectlyToFirstControllerFile() {
+        VirtualFile html = addFile("example.component.html");
+        VirtualFile typescript = addFile("example.component.ts");
+        addFile("example.component.js");
+
+        assertTarget(typescript, QuickSwitchAction.findTargetFile(
+            html,
+            QuickSwitchFileType.Category.CONTROLLER
+        ));
+    }
+
+    public void testJumpsDirectlyToFirstStyleFile() {
+        VirtualFile typescript = addFile("example.component.ts");
+        VirtualFile css = addFile("example.component.css");
+        addFile("example.component.scss");
+
+        assertTarget(css, QuickSwitchAction.findTargetFile(
+            typescript,
+            QuickSwitchFileType.Category.STYLE
+        ));
+    }
+
+    public void testJumpsDirectlyToFirstMarkupFile() {
+        VirtualFile typescript = addFile("example.component.ts");
+        VirtualFile html = addFile("example.component.html");
+        addFile("example.component.pug");
+
+        assertTarget(html, QuickSwitchAction.findTargetFile(
+            typescript,
+            QuickSwitchFileType.Category.TEMPLATE
+        ));
+    }
+
+    public void testCategoryShortcutDoesNotReopenOnlyCurrentFile() {
+        VirtualFile typescript = addFile("example.component.ts");
+
+        assertNull(QuickSwitchAction.findTargetFile(
+            typescript,
+            QuickSwitchFileType.Category.CONTROLLER
+        ));
+    }
+
     public void testKeepsPreviousTabOpen() {
         VirtualFile typescript = addFile("example.component.ts");
         VirtualFile html = addFile("example.component.html");

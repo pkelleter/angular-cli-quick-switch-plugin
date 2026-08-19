@@ -111,12 +111,69 @@ public final class QuickSwitchAction extends DumbAwareAction {
         return null;
     }
 
-    private static boolean isSwitchable(@Nullable VirtualFile file) {
+    static @Nullable VirtualFile findTargetFile(
+        @NotNull VirtualFile currentFile,
+        @NotNull QuickSwitchFileType.Category category
+    ) {
+        if (!currentFile.isValid() || currentFile.isDirectory()) {
+            return null;
+        }
+
+        VirtualFile parent = currentFile.getParent();
+        FileMatch currentMatch = matchFile(currentFile);
+        if (parent == null || currentMatch == null) {
+            return null;
+        }
+
+        List<QuickSwitchFileType> categoryTypes = FILE_TYPES.stream()
+            .filter(fileType -> fileType.category() == category)
+            .toList();
+        int currentIndex = categoryTypes.indexOf(currentMatch.fileType());
+        VirtualFile[] siblings = parent.getChildren();
+
+        if (currentIndex < 0) {
+            for (QuickSwitchFileType targetType : categoryTypes) {
+                VirtualFile target = findSibling(currentMatch.baseName(), targetType, siblings);
+                if (target != null) {
+                    return target;
+                }
+            }
+            return null;
+        }
+
+        for (int offset = 1; offset < categoryTypes.size(); offset++) {
+            QuickSwitchFileType targetType = categoryTypes.get((currentIndex + offset) % categoryTypes.size());
+            VirtualFile target = findSibling(currentMatch.baseName(), targetType, siblings);
+            if (target != null) {
+                return target;
+            }
+        }
+
+        return null;
+    }
+
+    static boolean isSwitchable(@Nullable VirtualFile file) {
         return file != null
             && file.isValid()
             && !file.isDirectory()
             && file.getParent() != null
             && matchFile(file) != null;
+    }
+
+    private static @Nullable VirtualFile findSibling(
+        @NotNull String baseName,
+        @NotNull QuickSwitchFileType targetType,
+        VirtualFile @NotNull [] siblings
+    ) {
+        String targetName = baseName + "." + targetType.suffix();
+        for (VirtualFile sibling : siblings) {
+            if (sibling.isValid()
+                && !sibling.isDirectory()
+                && targetName.equalsIgnoreCase(sibling.getName())) {
+                return sibling;
+            }
+        }
+        return null;
     }
 
     private static @Nullable FileMatch matchFile(@NotNull VirtualFile file) {
