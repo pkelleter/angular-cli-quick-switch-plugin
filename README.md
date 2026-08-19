@@ -73,6 +73,24 @@ The plugin is compiled with Java 21. End users do not need to install a separate
 
 Compatibility is checked with JetBrains Plugin Verifier against platform versions from 2024.2 through 2026.2.
 
+## Build Variants
+
+The shared codebase produces two mutually exclusive plugin variants:
+
+| Variant | Plugin name | Plugin ID |
+|---|---|---|
+| `angular` (default) | Angular CLI QuickSwitch | `patrick.kelleter.angular-cli-quick-switch` |
+| `file` | File QuickSwitch | `patrick.kelleter.file-quick-switch` |
+
+Build either variant with Java 21:
+
+```shell
+./gradlew buildPlugin -PpluginVariant=angular
+./gradlew buildPlugin -PpluginVariant=file
+```
+
+The ZIP files are written to `build/distributions` with variant-specific names. Both variants retain the same internal action and settings IDs so keymaps and preferences survive switching between them, but they cannot be installed simultaneously.
+
 ## License
 
 Licensed under the [Apache License 2.0](LICENSE).

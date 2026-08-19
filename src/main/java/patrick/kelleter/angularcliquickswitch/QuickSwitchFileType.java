@@ -21,20 +21,10 @@ enum QuickSwitchFileType {
     JAVASCRIPT_SPEC(Category.TESTS, "spec.js", false);
 
     enum Category {
-        CONTROLLER("Controller"),
-        TEMPLATE("Template"),
-        STYLE("Style"),
-        TESTS("Tests");
-
-        private final String displayName;
-
-        Category(String displayName) {
-            this.displayName = displayName;
-        }
-
-        String displayName() {
-            return displayName;
-        }
+        CONTROLLER,
+        TEMPLATE,
+        STYLE,
+        TESTS
     }
 
     private final Category category;

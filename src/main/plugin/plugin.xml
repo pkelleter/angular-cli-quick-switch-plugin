@@ -1,41 +1,42 @@
 <idea-plugin url="https://github.com/pkelleter/angular-cli-quick-switch-plugin">
-    <id>patrick.kelleter.angular-cli-quick-switch</id>
-    <name>Angular CLI QuickSwitch</name>
+    <id>@PLUGIN_ID@</id>
+    <name>@PLUGIN_NAME@</name>
     <vendor email="patrick.kelleter.1987@gmail.com" url="https://github.com/pkelleter/angular-cli-quick-switch-plugin">Patrick Kelleter</vendor>
 
     <description><![CDATA[
-    Angular CLI QuickSwitch cycles between related component files with one shortcut (default Alt + S). Supported file types are js, ts, html, php, haml, jade, pug, slim, css, sass, scss, less, styl, and optional spec.ts and spec.js tests.
+    @PLUGIN_DESCRIPTION@
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
+    <incompatible-with>@INCOMPATIBLE_PLUGIN_ID@</incompatible-with>
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable
                 parentId="tools"
                 instance="patrick.kelleter.angularcliquickswitch.QuickSwitchConfigurable"
                 id="patrick.kelleter.angular-cli-quick-switch.settings"
-                displayName="Angular CLI QuickSwitch"/>
+                displayName="@PLUGIN_NAME@"/>
     </extensions>
 
     <actions>
-        <action id="ngxQuickSwitch.QuickSwitch" class="patrick.kelleter.angularcliquickswitch.QuickSwitchAction" text="QuickSwitch: Cycle files"
-                description="Quickly switches between Angular CLI files for one component, e.g. ts, html, css">
+        <action id="ngxQuickSwitch.QuickSwitch" class="patrick.kelleter.angularcliquickswitch.QuickSwitchAction" text="@ACTION_PREFIX@: Cycle files"
+                description="@CYCLE_ACTION_DESCRIPTION@">
             <keyboard-shortcut first-keystroke="alt S" keymap="$default"/>
         </action>
         <action id="ngxQuickSwitch.Tests" class="patrick.kelleter.angularcliquickswitch.QuickSwitchTestsAction"
-                text="QuickSwitch: Tests" description="Switches directly to and between related test files">
+                text="@ACTION_PREFIX@: Tests" description="Switches directly to and between related test files">
             <keyboard-shortcut first-keystroke="alt T" keymap="$default"/>
         </action>
         <action id="ngxQuickSwitch.Controllers" class="patrick.kelleter.angularcliquickswitch.QuickSwitchControllersAction"
-                text="QuickSwitch: Controllers" description="Switches directly to and between related controller files">
+                text="@ACTION_PREFIX@: @CONTROLLER_ACTION_NAME@" description="@CONTROLLER_ACTION_DESCRIPTION@">
             <keyboard-shortcut first-keystroke="alt X" keymap="$default"/>
         </action>
         <action id="ngxQuickSwitch.Markup" class="patrick.kelleter.angularcliquickswitch.QuickSwitchMarkupAction"
-                text="QuickSwitch: Markup" description="Switches directly to and between related markup files">
+                text="@ACTION_PREFIX@: Markup" description="Switches directly to and between related markup files">
             <keyboard-shortcut first-keystroke="alt C" keymap="$default"/>
         </action>
         <action id="ngxQuickSwitch.Styles" class="patrick.kelleter.angularcliquickswitch.QuickSwitchStylesAction"
-                text="QuickSwitch: Styles" description="Switches directly to and between related style files">
+                text="@ACTION_PREFIX@: Styles" description="Switches directly to and between related style files">
             <keyboard-shortcut first-keystroke="alt V" keymap="$default"/>
         </action>
     </actions>

@@ -23,9 +23,14 @@ import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 public final class QuickSwitchConfigurable implements Configurable {
+    private static final ResourceBundle BRANDING = ResourceBundle.getBundle(
+        "patrick.kelleter.angularcliquickswitch.QuickSwitchBranding"
+    );
+
     private JCheckBox closePreviousTabCheckBox;
     private Map<QuickSwitchFileType, JCheckBox> fileTypeCheckBoxes;
     private Map<QuickSwitchFileType.Category, JCheckBox> customEnabledCheckBoxes;
@@ -33,7 +38,7 @@ public final class QuickSwitchConfigurable implements Configurable {
 
     @Override
     public @Nls String getDisplayName() {
-        return "Angular CLI QuickSwitch";
+        return BRANDING.getString("pluginName");
     }
 
     @Override
@@ -64,7 +69,7 @@ public final class QuickSwitchConfigurable implements Configurable {
         for (QuickSwitchFileType.Category category : QuickSwitchFileType.Category.values()) {
             JPanel categoryPanel = new JPanel();
             categoryPanel.setLayout(new BoxLayout(categoryPanel, BoxLayout.Y_AXIS));
-            JLabel categoryLabel = new JLabel(category.displayName());
+            JLabel categoryLabel = new JLabel(categoryDisplayName(category));
             categoryLabel.setFont(categoryLabel.getFont().deriveFont(Font.BOLD));
             categoryPanel.add(categoryLabel);
             categoryPanel.add(Box.createVerticalStrut(3));
@@ -87,7 +92,7 @@ public final class QuickSwitchConfigurable implements Configurable {
             customPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
             JCheckBox customEnabledCheckBox = new JCheckBox();
             customEnabledCheckBox.getAccessibleContext().setAccessibleName(
-                "Enable custom " + category.displayName().toLowerCase(Locale.ROOT) + " suffix"
+                "Enable custom " + categoryDisplayName(category).toLowerCase(Locale.ROOT) + " suffix"
             );
             JBTextField customSuffixField = new JBTextField(7);
             customSuffixField.getEmptyText().setText(".custom");
@@ -220,17 +225,17 @@ public final class QuickSwitchConfigurable implements Configurable {
             String suffix = normalizeSuffix(enteredSuffix);
             boolean enabled = customEnabledCheckBoxes.get(category).isSelected();
             if (enabled && enteredSuffix.isEmpty()) {
-                throw new ConfigurationException(category.displayName() + " custom suffix cannot be empty.");
+                throw new ConfigurationException(categoryDisplayName(category) + " custom suffix cannot be empty.");
             }
             if (!enteredSuffix.isEmpty() && !enteredSuffix.startsWith(".")) {
                 throw new ConfigurationException(
-                    category.displayName() + " custom suffix must start with a dot."
+                    categoryDisplayName(category) + " custom suffix must start with a dot."
                 );
             }
             if (!enteredSuffix.isEmpty()
                 && !enteredSuffix.matches("\\.[a-z0-9_-]+(?:\\.[a-z0-9_-]+)*")) {
                 throw new ConfigurationException(
-                    category.displayName() + " custom suffix contains invalid characters."
+                    categoryDisplayName(category) + " custom suffix contains invalid characters."
                 );
             }
             if (!suffix.isEmpty() && !usedSuffixes.add(suffix)) {
@@ -251,5 +256,14 @@ public final class QuickSwitchConfigurable implements Configurable {
 
     private static String formatSuffix(String suffix) {
         return suffix.isEmpty() ? "" : "." + suffix;
+    }
+
+    private static String categoryDisplayName(QuickSwitchFileType.Category category) {
+        return switch (category) {
+            case CONTROLLER -> BRANDING.getString("category.controller");
+            case TEMPLATE -> BRANDING.getString("category.template");
+            case STYLE -> BRANDING.getString("category.style");
+            case TESTS -> BRANDING.getString("category.tests");
+        };
     }
 }
