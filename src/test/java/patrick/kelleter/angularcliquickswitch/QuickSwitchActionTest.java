@@ -1,7 +1,10 @@
 package patrick.kelleter.angularcliquickswitch;
 
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.fixtures.BasePlatformTestCase;
+
+import java.util.Arrays;
 
 public final class QuickSwitchActionTest extends BasePlatformTestCase {
     public void testCyclesThroughExistingCounterparts() {
@@ -57,6 +60,30 @@ public final class QuickSwitchActionTest extends BasePlatformTestCase {
         assertTarget(stylesheet, QuickSwitchAction.findTargetFile(typescript));
     }
 
+    public void testKeepsPreviousTabOpen() {
+        VirtualFile typescript = addFile("example.component.ts");
+        VirtualFile html = addFile("example.component.html");
+        FileEditorManager fileEditorManager = FileEditorManager.getInstance(getProject());
+        fileEditorManager.openFile(typescript, true);
+
+        QuickSwitchAction.navigate(getProject(), typescript, html, false);
+
+        assertOpen(fileEditorManager, typescript);
+        assertOpen(fileEditorManager, html);
+    }
+
+    public void testClosesPreviousTabAfterOpeningTarget() {
+        VirtualFile typescript = addFile("example.component.ts");
+        VirtualFile html = addFile("example.component.html");
+        FileEditorManager fileEditorManager = FileEditorManager.getInstance(getProject());
+        fileEditorManager.openFile(typescript, true);
+
+        QuickSwitchAction.navigate(getProject(), typescript, html, true);
+
+        assertNotOpen(fileEditorManager, typescript);
+        assertOpen(fileEditorManager, html);
+    }
+
     private VirtualFile addFile(String path) {
         return myFixture.addFileToProject(path, "").getVirtualFile();
     }
@@ -64,5 +91,15 @@ public final class QuickSwitchActionTest extends BasePlatformTestCase {
     private void assertTarget(VirtualFile expected, VirtualFile actual) {
         assertNotNull(actual);
         assertEquals(expected.getPath(), actual.getPath());
+    }
+
+    private void assertOpen(FileEditorManager fileEditorManager, VirtualFile file) {
+        assertTrue(Arrays.stream(fileEditorManager.getOpenFiles())
+            .anyMatch(openFile -> openFile.getPath().equals(file.getPath())));
+    }
+
+    private void assertNotOpen(FileEditorManager fileEditorManager, VirtualFile file) {
+        assertFalse(Arrays.stream(fileEditorManager.getOpenFiles())
+            .anyMatch(openFile -> openFile.getPath().equals(file.getPath())));
     }
 }

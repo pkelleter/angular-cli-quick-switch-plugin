@@ -36,13 +36,12 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 intellijPlatform {
-    buildSearchableOptions = false
-
     pluginConfiguration {
         changeNotes = """
             <ul>
                 <li>Updated for IntelliJ Platform 2024.2 and newer.</li>
-                <li>Fixed switching in editor splits and removed tab-closing side effects.</li>
+                <li>Added a settings page with optional previous-tab closing.</li>
+                <li>Fixed switching in editor splits and removed tab-closing side effects by default.</li>
                 <li>Improved support for virtual files and modern IntelliJ action APIs.</li>
             </ul>
         """.trimIndent()

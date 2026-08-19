@@ -9,6 +9,14 @@
 
     <depends>com.intellij.modules.platform</depends>
 
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationConfigurable
+                parentId="tools"
+                instance="patrick.kelleter.angularcliquickswitch.QuickSwitchConfigurable"
+                id="patrick.kelleter.angular-cli-quick-switch.settings"
+                displayName="Angular CLI QuickSwitch"/>
+    </extensions>
+
     <actions>
         <action id="ngxQuickSwitch.QuickSwitch" class="patrick.kelleter.angularcliquickswitch.QuickSwitchAction" text="QuickSwitch"
                 description="Quickly switches between Angular CLI files for one component, e.g. ts, html, css">

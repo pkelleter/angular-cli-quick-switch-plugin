@@ -46,9 +46,28 @@ public final class QuickSwitchAction extends DumbAwareAction {
             return;
         }
 
+        navigate(
+            project,
+            currentFile,
+            targetFile,
+            QuickSwitchSettings.getInstance().isClosePreviousTab()
+        );
+    }
+
+    static void navigate(
+        @NotNull Project project,
+        @NotNull VirtualFile currentFile,
+        @NotNull VirtualFile targetFile,
+        boolean closePreviousTab
+    ) {
         OpenFileDescriptor descriptor = new OpenFileDescriptor(project, targetFile)
             .setUseCurrentWindow(true);
-        FileEditorManager.getInstance(project).openEditor(descriptor, true);
+        FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
+        boolean targetOpened = !fileEditorManager.openEditor(descriptor, true).isEmpty();
+
+        if (targetOpened && closePreviousTab && currentFile.isValid() && !currentFile.equals(targetFile)) {
+            fileEditorManager.closeFile(currentFile);
+        }
     }
 
     static @Nullable VirtualFile findTargetFile(@NotNull VirtualFile currentFile) {
