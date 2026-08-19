@@ -1,0 +1,1 @@
+rootProject.name = "angular-cli-quick-switch-plugin"

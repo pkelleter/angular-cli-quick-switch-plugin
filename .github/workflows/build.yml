@@ -1,0 +1,46 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch sources
+        uses: actions/checkout@v6
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Test and build
+        run: ./gradlew check buildPlugin
+
+      - name: Verify plugin compatibility
+        run: ./gradlew verifyPlugin
+
+      - name: Upload plugin distribution
+        uses: actions/upload-artifact@v7
+        with:
+          name: angular-cli-quick-switch
+          path: build/distributions/*.zip
+
+      - name: Upload verification reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: plugin-verifier-reports
+          path: build/reports/pluginVerifier
+          if-no-files-found: ignore
