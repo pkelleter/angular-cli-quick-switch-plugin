@@ -30,12 +30,12 @@
                 text="QuickSwitch: Controllers" description="Switches directly to and between related controller files">
             <keyboard-shortcut first-keystroke="alt X" keymap="$default"/>
         </action>
-        <action id="ngxQuickSwitch.Styles" class="patrick.kelleter.angularcliquickswitch.QuickSwitchStylesAction"
-                text="QuickSwitch: Styles" description="Switches directly to and between related style files">
-            <keyboard-shortcut first-keystroke="alt C" keymap="$default"/>
-        </action>
         <action id="ngxQuickSwitch.Markup" class="patrick.kelleter.angularcliquickswitch.QuickSwitchMarkupAction"
                 text="QuickSwitch: Markup" description="Switches directly to and between related markup files">
+            <keyboard-shortcut first-keystroke="alt C" keymap="$default"/>
+        </action>
+        <action id="ngxQuickSwitch.Styles" class="patrick.kelleter.angularcliquickswitch.QuickSwitchStylesAction"
+                text="QuickSwitch: Styles" description="Switches directly to and between related style files">
             <keyboard-shortcut first-keystroke="alt V" keymap="$default"/>
         </action>
     </actions>

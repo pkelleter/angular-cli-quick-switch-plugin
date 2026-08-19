@@ -179,6 +179,61 @@ public final class QuickSwitchActionTest extends BasePlatformTestCase {
         ));
     }
 
+    public void testMainCycleIncludesEnabledCustomSuffix() {
+        QuickSwitchSettings settings = new QuickSwitchSettings();
+        settings.setCustomSuffix(QuickSwitchFileType.Category.CONTROLLER, "tsx", true);
+        VirtualFile typescript = addFile("example.component.ts");
+        VirtualFile tsx = addFile("example.component.tsx");
+
+        assertTarget(tsx, QuickSwitchAction.findTargetFile(typescript, settings));
+    }
+
+    public void testMainCycleSkipsDisabledCustomSuffix() {
+        QuickSwitchSettings settings = new QuickSwitchSettings();
+        settings.setCustomSuffix(QuickSwitchFileType.Category.CONTROLLER, "tsx", false);
+        VirtualFile typescript = addFile("example.component.ts");
+        addFile("example.component.tsx");
+        VirtualFile html = addFile("example.component.html");
+
+        assertTarget(html, QuickSwitchAction.findTargetFile(typescript, settings));
+    }
+
+    public void testCanSwitchAwayFromDisabledCustomSuffix() {
+        QuickSwitchSettings settings = new QuickSwitchSettings();
+        settings.setCustomSuffix(QuickSwitchFileType.Category.CONTROLLER, "tsx", false);
+        VirtualFile tsx = addFile("example.component.tsx");
+        VirtualFile html = addFile("example.component.html");
+
+        assertTarget(html, QuickSwitchAction.findTargetFile(tsx, settings));
+    }
+
+    public void testCategoryShortcutIncludesEnabledCustomSuffix() {
+        QuickSwitchSettings settings = new QuickSwitchSettings();
+        settings.setCustomSuffix(QuickSwitchFileType.Category.STYLE, "pcss", true);
+        VirtualFile typescript = addFile("example.component.ts");
+        VirtualFile pcss = addFile("example.component.pcss");
+
+        assertTarget(pcss, QuickSwitchAction.findTargetFile(
+            typescript,
+            QuickSwitchFileType.Category.STYLE,
+            settings
+        ));
+    }
+
+    public void testCompoundCustomSuffixUsesComponentBaseName() {
+        QuickSwitchSettings settings = new QuickSwitchSettings();
+        settings.setCustomSuffix(QuickSwitchFileType.Category.TEMPLATE, "view.html", true);
+        VirtualFile typescript = addFile("example.component.ts");
+        VirtualFile customTemplate = addFile("example.component.view.html");
+
+        assertTarget(customTemplate, QuickSwitchAction.findTargetFile(
+            typescript,
+            QuickSwitchFileType.Category.TEMPLATE,
+            settings
+        ));
+        assertTarget(typescript, QuickSwitchAction.findTargetFile(customTemplate, settings));
+    }
+
     public void testKeepsPreviousTabOpen() {
         VirtualFile typescript = addFile("example.component.ts");
         VirtualFile html = addFile("example.component.html");

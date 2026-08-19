@@ -25,7 +25,9 @@ public abstract class QuickSwitchCategoryAction extends DumbAwareAction {
         Project project = event.getProject();
         VirtualFile file = event.getData(CommonDataKeys.VIRTUAL_FILE);
         event.getPresentation().setEnabled(
-            project != null && !project.isDisposed() && QuickSwitchAction.isSwitchable(file)
+            project != null
+                && !project.isDisposed()
+                && QuickSwitchAction.isSwitchable(file, QuickSwitchSettings.getInstance())
         );
     }
 
@@ -37,7 +39,8 @@ public abstract class QuickSwitchCategoryAction extends DumbAwareAction {
             return;
         }
 
-        VirtualFile targetFile = QuickSwitchAction.findTargetFile(currentFile, category);
+        QuickSwitchSettings settings = QuickSwitchSettings.getInstance();
+        VirtualFile targetFile = QuickSwitchAction.findTargetFile(currentFile, category, settings);
         if (targetFile == null) {
             return;
         }
@@ -46,7 +49,7 @@ public abstract class QuickSwitchCategoryAction extends DumbAwareAction {
             project,
             currentFile,
             targetFile,
-            QuickSwitchSettings.getInstance().isClosePreviousTab()
+            settings.isClosePreviousTab()
         );
     }
 }

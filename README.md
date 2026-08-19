@@ -22,13 +22,13 @@ Test files are excluded from the main cycle by default. Press **Alt+T** to jump 
 
 ## Shortcuts
 
-| Action | Default | Behavior |
-|---|---|---|
+| Action | Default   | Behavior |
+|---|-----------|---|
 | QuickSwitch | **Alt+S** | Cycles through all enabled related file types. |
-| QuickSwitch: Tests | **Alt+T** | Jumps to and cycles between `.spec.ts` and `.spec.js`. |
 | QuickSwitch: Controllers | **Alt+X** | Jumps to and cycles between `.ts` and `.js`. |
-| QuickSwitch: Styles | **Alt+C** | Jumps to and cycles between supported style files. |
-| QuickSwitch: Markup | **Alt+V** | Jumps to and cycles between supported markup files. |
+| QuickSwitch: Markup | **Alt+C** | Jumps to and cycles between supported markup files. |
+| QuickSwitch: Styles | **Alt+V** | Jumps to and cycles between supported style files. |
+| QuickSwitch: Tests | **Alt+T** | Jumps to and cycles between `.spec.ts` and `.spec.js`. |
 
 All shortcuts can be changed under the IDE's **Settings | Keymap** page by searching for `QuickSwitch`.
 
@@ -61,7 +61,9 @@ Each checkbox controls whether that file type participates in the main **Alt+S**
 
 The dedicated category shortcuts intentionally ignore these checkboxes. For example, **Alt+T** can always find a related test file even when tests are excluded from the main cycle.
 
-If the current file type is disabled, QuickSwitch can still switch away from it to the next enabled counterpart. Disabled types are only excluded as main-cycle targets.
+### Custom Extensions
+
+Each group supports one optional custom suffix, such as `.tsx` or `.module.scss`; enable its checkbox and enter a unique suffix with or without a leading dot. Custom suffixes are appended to their group and participate in both the main cycle and dedicated category shortcut only while enabled.
 
 ## Compatibility
 

@@ -9,6 +9,8 @@ import com.intellij.openapi.components.Storage;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 @Service(Service.Level.APP)
@@ -22,6 +24,8 @@ public final class QuickSwitchSettings implements PersistentStateComponent<Quick
         public boolean closePreviousTab;
         public Set<String> disabledFileTypes = new HashSet<>();
         public Set<String> enabledOptInFileTypes = new HashSet<>();
+        public Map<String, String> customSuffixes = new HashMap<>();
+        public Set<String> enabledCustomCategories = new HashSet<>();
     }
 
     private volatile SettingsState state = new SettingsState();
@@ -42,6 +46,12 @@ public final class QuickSwitchSettings implements PersistentStateComponent<Quick
         }
         if (state.enabledOptInFileTypes == null) {
             state.enabledOptInFileTypes = new HashSet<>();
+        }
+        if (state.customSuffixes == null) {
+            state.customSuffixes = new HashMap<>();
+        }
+        if (state.enabledCustomCategories == null) {
+            state.enabledCustomCategories = new HashSet<>();
         }
         this.state = state;
     }
@@ -79,12 +89,42 @@ public final class QuickSwitchSettings implements PersistentStateComponent<Quick
         state = newState;
     }
 
+    boolean isCustomSuffixEnabled(@NotNull QuickSwitchFileType.Category category) {
+        return state.enabledCustomCategories.contains(category.name());
+    }
+
+    @NotNull String getCustomSuffix(@NotNull QuickSwitchFileType.Category category) {
+        return state.customSuffixes.getOrDefault(category.name(), "");
+    }
+
+    void setCustomSuffix(
+        @NotNull QuickSwitchFileType.Category category,
+        @NotNull String suffix,
+        boolean enabled
+    ) {
+        SettingsState newState = copyState();
+        if (suffix.isEmpty()) {
+            newState.customSuffixes.remove(category.name());
+        } else {
+            newState.customSuffixes.put(category.name(), suffix);
+        }
+
+        if (enabled) {
+            newState.enabledCustomCategories.add(category.name());
+        } else {
+            newState.enabledCustomCategories.remove(category.name());
+        }
+        state = newState;
+    }
+
     private SettingsState copyState() {
         SettingsState currentState = state;
         SettingsState newState = new SettingsState();
         newState.closePreviousTab = currentState.closePreviousTab;
         newState.disabledFileTypes = new HashSet<>(currentState.disabledFileTypes);
         newState.enabledOptInFileTypes = new HashSet<>(currentState.enabledOptInFileTypes);
+        newState.customSuffixes = new HashMap<>(currentState.customSuffixes);
+        newState.enabledCustomCategories = new HashSet<>(currentState.enabledCustomCategories);
         return newState;
     }
 }
