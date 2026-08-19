@@ -60,6 +60,55 @@ public final class QuickSwitchActionTest extends BasePlatformTestCase {
         assertTarget(stylesheet, QuickSwitchAction.findTargetFile(typescript));
     }
 
+    public void testSkipsDisabledFileType() {
+        VirtualFile html = addFile("example.component.html");
+        addFile("example.component.scss");
+        VirtualFile typescript = addFile("example.component.ts");
+
+        VirtualFile target = QuickSwitchAction.findTargetFile(
+            html,
+            fileType -> fileType.enabledByDefault() && fileType != QuickSwitchFileType.SCSS
+        );
+
+        assertTarget(typescript, target);
+    }
+
+    public void testCanSwitchAwayFromDisabledFileType() {
+        VirtualFile stylesheet = addFile("example.component.scss");
+        VirtualFile typescript = addFile("example.component.ts");
+
+        VirtualFile target = QuickSwitchAction.findTargetFile(
+            stylesheet,
+            fileType -> fileType.enabledByDefault() && fileType != QuickSwitchFileType.SCSS
+        );
+
+        assertTarget(typescript, target);
+    }
+
+    public void testSkipsSpecFileByDefault() {
+        VirtualFile typescript = addFile("example.component.ts");
+        addFile("example.component.spec.ts");
+        VirtualFile html = addFile("example.component.html");
+
+        assertTarget(html, QuickSwitchAction.findTargetFile(typescript));
+    }
+
+    public void testCyclesThroughEnabledSpecFile() {
+        VirtualFile typescript = addFile("example.component.ts");
+        VirtualFile spec = addFile("example.component.spec.ts");
+
+        VirtualFile target = QuickSwitchAction.findTargetFile(
+            typescript,
+            fileType -> fileType.enabledByDefault() || fileType == QuickSwitchFileType.TYPESCRIPT_SPEC
+        );
+
+        assertTarget(spec, target);
+        assertTarget(typescript, QuickSwitchAction.findTargetFile(
+            spec,
+            fileType -> fileType.enabledByDefault() || fileType == QuickSwitchFileType.TYPESCRIPT_SPEC
+        ));
+    }
+
     public void testKeepsPreviousTabOpen() {
         VirtualFile typescript = addFile("example.component.ts");
         VirtualFile html = addFile("example.component.html");

@@ -11,15 +11,15 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
+import java.util.function.Predicate;
 
 public final class QuickSwitchAction extends DumbAwareAction {
-    private static final List<String> EXTENSIONS = List.of(
-        "ts", "js",
-        "html", "php", "haml", "jade", "pug", "slim",
-        "css", "sass", "scss", "less", "styl"
-    );
+    private static final List<QuickSwitchFileType> FILE_TYPES = List.of(QuickSwitchFileType.values());
+    private static final List<QuickSwitchFileType> FILE_TYPES_BY_SUFFIX_LENGTH = FILE_TYPES.stream()
+        .sorted(Comparator.comparingInt((QuickSwitchFileType fileType) -> fileType.suffix().length()).reversed())
+        .toList();
 
     @Override
     public @NotNull ActionUpdateThread getActionUpdateThread() {
@@ -41,7 +41,8 @@ public final class QuickSwitchAction extends DumbAwareAction {
             return;
         }
 
-        VirtualFile targetFile = findTargetFile(currentFile);
+        QuickSwitchSettings settings = QuickSwitchSettings.getInstance();
+        VirtualFile targetFile = findTargetFile(currentFile, settings::isFileTypeEnabled);
         if (targetFile == null) {
             return;
         }
@@ -50,7 +51,7 @@ public final class QuickSwitchAction extends DumbAwareAction {
             project,
             currentFile,
             targetFile,
-            QuickSwitchSettings.getInstance().isClosePreviousTab()
+            settings.isClosePreviousTab()
         );
     }
 
@@ -71,32 +72,37 @@ public final class QuickSwitchAction extends DumbAwareAction {
     }
 
     static @Nullable VirtualFile findTargetFile(@NotNull VirtualFile currentFile) {
+        return findTargetFile(currentFile, QuickSwitchFileType::enabledByDefault);
+    }
+
+    static @Nullable VirtualFile findTargetFile(
+        @NotNull VirtualFile currentFile,
+        @NotNull Predicate<QuickSwitchFileType> isEnabled
+    ) {
         if (!currentFile.isValid() || currentFile.isDirectory()) {
             return null;
         }
 
         VirtualFile parent = currentFile.getParent();
-        String extension = currentFile.getExtension();
-        if (parent == null || extension == null) {
+        FileMatch currentMatch = matchFile(currentFile);
+        if (parent == null || currentMatch == null) {
             return null;
         }
 
-        String currentExtension = extension.toLowerCase(Locale.ROOT);
-        int currentIndex = EXTENSIONS.indexOf(currentExtension);
-        if (currentIndex < 0) {
-            return null;
-        }
-
-        String baseName = currentFile.getNameWithoutExtension();
+        int currentIndex = FILE_TYPES.indexOf(currentMatch.fileType());
         VirtualFile[] siblings = parent.getChildren();
 
-        for (int offset = 1; offset < EXTENSIONS.size(); offset++) {
-            String targetExtension = EXTENSIONS.get((currentIndex + offset) % EXTENSIONS.size());
+        for (int offset = 1; offset < FILE_TYPES.size(); offset++) {
+            QuickSwitchFileType targetType = FILE_TYPES.get((currentIndex + offset) % FILE_TYPES.size());
+            if (!isEnabled.test(targetType)) {
+                continue;
+            }
+
+            String targetName = currentMatch.baseName() + "." + targetType.suffix();
             for (VirtualFile sibling : siblings) {
                 if (sibling.isValid()
                     && !sibling.isDirectory()
-                    && baseName.equals(sibling.getNameWithoutExtension())
-                    && targetExtension.equalsIgnoreCase(sibling.getExtension())) {
+                    && targetName.equalsIgnoreCase(sibling.getName())) {
                     return sibling;
                 }
             }
@@ -106,11 +112,24 @@ public final class QuickSwitchAction extends DumbAwareAction {
     }
 
     private static boolean isSwitchable(@Nullable VirtualFile file) {
-        if (file == null || !file.isValid() || file.isDirectory() || file.getParent() == null) {
-            return false;
-        }
-
-        String extension = file.getExtension();
-        return extension != null && EXTENSIONS.contains(extension.toLowerCase(Locale.ROOT));
+        return file != null
+            && file.isValid()
+            && !file.isDirectory()
+            && file.getParent() != null
+            && matchFile(file) != null;
     }
+
+    private static @Nullable FileMatch matchFile(@NotNull VirtualFile file) {
+        String fileName = file.getName();
+        for (QuickSwitchFileType fileType : FILE_TYPES_BY_SUFFIX_LENGTH) {
+            String suffix = "." + fileType.suffix();
+            int suffixStart = fileName.length() - suffix.length();
+            if (suffixStart > 0 && fileName.regionMatches(true, suffixStart, suffix, 0, suffix.length())) {
+                return new FileMatch(fileType, fileName.substring(0, suffixStart));
+            }
+        }
+        return null;
+    }
+
+    private record FileMatch(QuickSwitchFileType fileType, String baseName) { }
 }

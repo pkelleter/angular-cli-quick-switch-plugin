@@ -4,7 +4,7 @@
     <vendor email="patrick.kelleter.1987@gmail.com" url="https://github.com/pkelleter/angular-cli-quick-switch-plugin">Patrick Kelleter</vendor>
 
     <description><![CDATA[
-    Angular CLI QuickSwitch cycles between related component files with one shortcut (default Alt + S). Supported extensions are js, ts, html, php, haml, jade, pug, slim, css, sass, scss, less, and styl.
+    Angular CLI QuickSwitch cycles between related component files with one shortcut (default Alt + S). Supported file types are js, ts, html, php, haml, jade, pug, slim, css, sass, scss, less, styl, and optional spec.ts and spec.js tests.
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
