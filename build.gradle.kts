@@ -32,7 +32,7 @@ val pluginBranding = when (pluginVariantName) {
     "angular" -> PluginBranding(
         id = "patrick.kelleter.angular-cli-quick-switch",
         name = "Angular CLI QuickSwitch",
-        description = "Angular CLI QuickSwitch cycles between related component files with one shortcut (default Alt + S). Supported file types are js, ts, html, php, haml, jade, pug, slim, css, sass, scss, less, styl, optional spec.ts/spec.js tests, and custom suffixes.",
+        description = "Switch between related Angular component files with configurable shortcuts. Cycle through controllers, templates, styles, and tests, jump directly to a category, and add custom suffixes.",
         actionPrefix = "QuickSwitch",
         controllerCategoryName = "Controller",
         controllerActionName = "Controllers",
@@ -45,7 +45,7 @@ val pluginBranding = when (pluginVariantName) {
     "file" -> PluginBranding(
         id = "patrick.kelleter.file-quick-switch",
         name = "File QuickSwitch",
-        description = "File QuickSwitch cycles between related sibling files with one shortcut (default Alt + S). Supported file types are js, ts, html, php, haml, jade, pug, slim, css, sass, scss, less, styl, optional spec.ts/spec.js tests, and custom suffixes.",
+        description = "Switch between related sibling files with configurable shortcuts. Cycle through scripts, markup, styles, and tests, jump directly to a category, and add custom suffixes.",
         actionPrefix = "File QuickSwitch",
         controllerCategoryName = "Scripts",
         controllerActionName = "Scripts",
